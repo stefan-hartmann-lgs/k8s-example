@@ -6,7 +6,7 @@ metadata:
   labels:
     app: tomcat
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: tomcat
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: tomcat-sample
-          image: harbor.prodyna.com/training/tomcat-sample:azure-training-5
+          image: tomcat:8-jre8-alpine
           ports:
             - containerPort: 8080
           env:
