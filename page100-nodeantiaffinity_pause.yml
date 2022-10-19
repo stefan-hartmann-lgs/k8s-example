@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pause-deploy
+  labels:
+    app: pause
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pause
+  template:
+    metadata:
+      labels:
+        app: pause
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - tomcat-sample
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: pause-sample
+          image: k8s.gcr.io/pause:2.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: STATIC_VAR
+              value: "Hello from environment"
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+            requests:
+              memory: "512Mi"
+              cpu: "0.5"
